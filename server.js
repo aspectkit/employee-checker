@@ -1,6 +1,6 @@
 // const express = require('express');
 const mysql = require('mysql2');
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 // const app = express();
 const inquirer = require('inquirer');
 
@@ -8,6 +8,7 @@ const inquirer = require('inquirer');
 // app.use(express.json()); 
 
 require('dotenv').config();
+
 const db = mysql.createConnection({
     host: 'localhost',
     user: process.env.DB_USER,
@@ -106,27 +107,59 @@ inquirer
 ])
 .then(function (response){
     if (response.action === 'View Departments'){
-        ViewDepartments(response);
+        viewDepartments(response);
     }
     else if (response.action === 'View Roles'){
-        ViewRoles(response);
+        viewRoles(response);
     }
     else if (response.action === 'View Employees'){
-        ViewEmployees(response);
+        viewEmployees(response);
     }
     else if (response.action === 'Add Department'){
-        AddDepartment(response);
+        addDepartment(response);
     }
     else if (response.action === 'Add Role'){
-        AddRole(response);
+        addRole(response);
     }
     else if (response.action === 'Add Employee'){
-        AddEmployee(response);
+        addEmployee(response);
     }
     else if (response.action === 'Update Employee Role'){
-        UpdateEmployeeRole(response);
+        updateEmployeeRole(response);
     }
 });
+
+
+function viewDepartments(){
+    db.query('SELECT * FROM departments', function (err, results){
+        console.table(results);
+    });
+}
+
+function viewRoles(){
+    db.query('SELECT * FROM roles', function (err, results){
+        console.table(results);
+    });
+}
+
+function viewEmployees(){
+    db.query('SELECT * FROM employees', function (err, results){
+        console.table(results);
+    });
+}
+
+function updateEmployeeRole(response){
+    let roleNum;
+    db.query(`SELECT id FROM roles WHERE title = '${response.updateEmployeeRole}'`, function (err, results){
+        roleNum = results[0]['id'];
+        db.query(`UPDATE employees SET role_id = ${roleNum} WHERE first_name = '${response.updateEmployee}'`, function (err, results){
+            console.log("Role Changed!")
+            db.query('SELECT * FROM employees', function (err, results){
+                console.table(results);
+            });
+        });
+    });
+}
 
 // app.use((req, res) => {
 //     res.status(404).end();
