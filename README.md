@@ -37,3 +37,7 @@ kitdhing\
 dhinkit@gmail.com
 
 ## Video
+
+
+https://github.com/kitdhing/employee-checker/assets/106041120/2dc17347-9cf5-4d89-b439-4d0f2f16c2f1
+
